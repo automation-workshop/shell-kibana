@@ -6,18 +6,6 @@ Vagrant.configure(2) do |config|
 
   config.vm.box = "ubuntu/trusty64"
 
-  config.vm.define :kibana do |kibana|
-    kibana.vm.hostname = 'shell-kibana'
-    kibana.vm.network "private_network", ip: "192.168.50.6"
-
-    kibana.vm.provider "virtualbox" do |vb|
-      vb.name = kibana.vm.hostname
-    end
-
-    kibana.vm.provision "shell", path: "scripts/kibana.sh",
-      args: es_ip
-  end
-
   config.vm.define :elasticsearch do |es|
     es.vm.hostname = 'shell-kibana-es'
     es.vm.network "private_network", ip: "192.168.50.7"
@@ -30,6 +18,18 @@ Vagrant.configure(2) do |config|
     end
 
     es.vm.provision "shell", path: "scripts/elasticsearch.sh"
+  end
+
+  config.vm.define :kibana do |kibana|
+    kibana.vm.hostname = 'shell-kibana'
+    kibana.vm.network "private_network", ip: "192.168.50.6"
+
+    kibana.vm.provider "virtualbox" do |vb|
+      vb.name = kibana.vm.hostname
+    end
+
+    kibana.vm.provision "shell", path: "scripts/kibana.sh",
+      args: es_ip
   end
 
 end
